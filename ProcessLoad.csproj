@@ -9,9 +9,7 @@
     <StartupObject>ProcessLoad.Program</StartupObject>
     <UseWindowsForms>True</UseWindowsForms>
   </PropertyGroup>
-
   <ItemGroup>
     <PackageReference Include="System.Management" Version="9.0.10" />
   </ItemGroup>
-
 </Project>

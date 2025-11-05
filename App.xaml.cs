@@ -12,7 +12,7 @@ namespace ProcessLoad
     {
         private NotifyIcon _TrayIconCPU;
         private NotifyIcon _TrayIconRAM;
-        private PerformanceCounter _CPUCounter;
+        private List<PerformanceCounter> _CPUCounters;
         private PerformanceCounter _RAMCounter;
         private DispatcherTimer _UpdateTimer;
         private float _TotalMemory;
@@ -20,11 +20,13 @@ namespace ProcessLoad
         {
             _TrayIconCPU = new();
             _TrayIconRAM = new();
-            _CPUCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+            _CPUCounters = [..Enumerable
+                .Range(0, Environment.ProcessorCount)
+                .Select(i => new PerformanceCounter("Processor", "% Processor Time", i.ToString()))];
             _RAMCounter = new PerformanceCounter("Memory", "Available MBytes");
             _UpdateTimer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(500)
+                Interval = TimeSpan.FromSeconds(1)
             };
             _TotalMemory = GetTotalMemory();
         }
@@ -57,7 +59,12 @@ namespace ProcessLoad
         #region Получение значений
         private float GetCpuUsage()
         {
-            return _CPUCounter.NextValue();
+            float totalUsage = 0;
+            foreach (var counter in _CPUCounters)
+            {
+                totalUsage += counter.NextValue();
+            }
+            return totalUsage/_CPUCounters.Count;
         }
         private float GetRamUsage()
         {
