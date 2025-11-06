@@ -12,7 +12,4 @@
   <ItemGroup>
     <PackageReference Include="System.Management" Version="9.0.10" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="README_resources\" />
-  </ItemGroup>
 </Project>
